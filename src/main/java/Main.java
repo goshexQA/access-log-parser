@@ -1,5 +1,11 @@
+import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Слkучайное число от 0 до 1: " + Math.random());
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.println("Введите текст и нажмите <Enter>: ");
+            String inputText = scanner.nextLine();
+            System.out.println("Длина введённого текста: " + inputText.length() + " символов.");
+
+        }
     }
 }
