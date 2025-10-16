@@ -45,7 +45,7 @@ public class Main {
                 }
             }
 
-            System.out.printf("Средний трафик в час: %.2f байт\n", stats.getTrafficRate());
+            //System.out.printf("Средний трафик в час: %.2f байт\n", stats.getTrafficRate());
 
         } catch (FileNotFoundException e) {
             System.err.println("Ошибка: Файл не найден — " + e.getMessage());
