@@ -44,7 +44,12 @@ public class Main {
                     stats.addEntry(entry);
                 }
             }
+            System.out.println("Несуществующие страницы (404):");
+            stats.getNotFoundPages().forEach(System.out::println);
 
+            System.out.println("\nСтатистика браузеров:");
+            stats.getBrowserStats().forEach((browser, share) ->
+                    System.out.printf("%s: %.2f%%\n", browser, share * 100));
             //System.out.printf("Средний трафик в час: %.2f байт\n", stats.getTrafficRate());
 
         } catch (FileNotFoundException e) {
