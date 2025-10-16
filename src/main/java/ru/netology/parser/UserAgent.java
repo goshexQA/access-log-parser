@@ -4,10 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserAgent {
+    private final String userAgentString; // ← сохраняем исходную строку
     private final String os;
     private final String browser;
 
     public UserAgent(String userAgentString) {
+        this.userAgentString = userAgentString; // ← сохранили
         this.os = extractOS(userAgentString);
         this.browser = extractBrowser(userAgentString);
     }
@@ -37,5 +39,13 @@ public class UserAgent {
 
     public String getBrowser() {
         return browser;
+    }
+
+    // Новый метод для определения бота
+    public boolean isBot() {
+        if (userAgentString == null || userAgentString.isEmpty()) {
+            return false;
+        }
+        return userAgentString.toLowerCase().contains("bot");
     }
 }
