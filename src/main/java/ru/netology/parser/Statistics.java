@@ -3,45 +3,45 @@ package ru.netology.parser;
 import java.util.*;
 
 public class Statistics {
-    // Хранит уникальные URL-адреса страниц с кодом ответа 200
-    private final Set<String> pages = new HashSet<>();
+    // Хранит уникальные URL-адреса страниц с кодом ответа 404 (несуществующие)
+    private final Set<String> notFoundPages = new HashSet<>();
 
-    // Считает, сколько раз встречалась каждая операционная система
-    private final Map<String, Integer> osCounter = new HashMap<>();
+    // Считает, сколько раз встречался каждый браузер
+    private final Map<String, Integer> browserCounter = new HashMap<>();
 
     // Метод вызывается для каждой записи из лога
-    public void addEntry(LogEntry entry) { // ← принимаем LogEntry, а не AccessLogEntry!
-        // Добавляем страницу, только если статус 200
-        if (entry.getResponseCode() == 200) {
-            pages.add(entry.getPath()); // ← getPath(), а не getUrl()
+    public void addEntry(LogEntry entry) {
+        // Добавляем страницу, только если статус 404
+        if (entry.getResponseCode() == 404) {
+            notFoundPages.add(entry.getPath());
         }
 
-        // Обрабатываем операционную систему
-        String os = entry.getUserAgent().getOs(); // ← через UserAgent!
-        if (os != null && !os.trim().isEmpty() && !os.equals("Unknown")) {
-            osCounter.put(os, osCounter.getOrDefault(os, 0) + 1);
+        // Обрабатываем браузер
+        String browser = entry.getUserAgent().getBrowser(); // ← получаем через UserAgent!
+        if (browser != null && !browser.trim().isEmpty() && !browser.equals("Other")) {
+            browserCounter.put(browser, browserCounter.getOrDefault(browser, 0) + 1);
         }
     }
 
-    // Возвращает множество всех существующих (доступных) страниц
-    public Set<String> getPages() {
-        return new HashSet<>(pages);
+    // Возвращает множество всех несуществующих страниц (с кодом 404)
+    public Set<String> getNotFoundPages() {
+        return new HashSet<>(notFoundPages);
     }
 
-    // Возвращает статистику по ОС в виде долей (от 0.0 до 1.0)
-    public Map<String, Double> getOsStats() {
+    // Возвращает статистику по браузерам в виде долей (от 0.0 до 1.0)
+    public Map<String, Double> getBrowserStats() {
         Map<String, Double> result = new HashMap<>();
-        int total = osCounter.values().stream().mapToInt(Integer::intValue).sum();
+        int total = browserCounter.values().stream().mapToInt(Integer::intValue).sum();
 
         if (total == 0) {
-            return result;
+            return result; // пустой мап, если нет данных
         }
 
-        for (Map.Entry<String, Integer> entry : osCounter.entrySet()) {
-            String os = entry.getKey();
+        for (Map.Entry<String, Integer> entry : browserCounter.entrySet()) {
+            String browser = entry.getKey();
             int count = entry.getValue();
             double share = (double) count / total;
-            result.put(os, share);
+            result.put(browser, share);
         }
 
         return result;
